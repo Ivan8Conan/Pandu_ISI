@@ -28,12 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Color(0xFF42A5F5),
-
-
-
-
-
-      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -93,12 +87,6 @@ class PanduISIApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFF42A5F5),
           secondary: const Color(0xFFF9A825),
-        ),
-        cardTheme: CardTheme(
-          elevation: 8,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          color: Colors.white.withOpacity(0.92),
-          shadowColor: Colors.blueAccent.withOpacity(0.10),
         ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
@@ -245,8 +233,7 @@ class _LayananScreenState extends State<LayananScreen> {
       case LayananKategori.perpustakaan:
         return layananPerpustakaan;
       case LayananKategori.all:
-      default:
-        return [
+      return [
           ...layananPendidikan,
           ...layananMahasiswa,
           ...layananPerpustakaan,
@@ -287,7 +274,7 @@ class _LayananScreenState extends State<LayananScreen> {
     super.dispose();
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       color: const Color(0xFF42A5F5),
