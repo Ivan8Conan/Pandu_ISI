@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'layananpage.dart';
 import 'tentangpage.dart';
+import 'informasipage.dart';
+import 'surveipage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -91,13 +93,24 @@ class _HomeMenuGrid extends StatelessWidget {
   const _HomeMenuGrid();
 
   final List<_HomeMenuItem> menuItems = const [
-    _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage()),
-    _HomeMenuItem(Icons.gavel_outlined, "Regulasi", null),
-    _HomeMenuItem(Icons.rule_folder_outlined, "SOP", null),
-    _HomeMenuItem(Icons.info_outline_rounded, "Informasi", null),
-    _HomeMenuItem(Icons.poll_outlined, "Survei", null),
-    _HomeMenuItem(Icons.assignment_outlined, "Laporan", null),
+    _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage(), null),
+    _HomeMenuItem(Icons.gavel_outlined, "Regulasi", null,
+        "https://pandu.isi.ac.id/regulasi-dan-rancangan-regulasi/"),
+    _HomeMenuItem(Icons.rule_folder_outlined, "SOP", null,
+        "https://pandu.isi.ac.id/sop/SOP%20ISI%20Yogyakarta.html"),
+    _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null),
+    _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null),
+    _HomeMenuItem(Icons.assignment_outlined, "Laporan", null, null),
   ];
+
+  Future<void> _launchUrl(String url, BuildContext context) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Gagal membuka link")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,12 +170,14 @@ class _HomeMenuGrid extends StatelessWidget {
 
   Widget _buildMenuCard(BuildContext context, _HomeMenuItem item) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (item.page != null) {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => item.page!),
           );
+        } else if (item.url != null) {
+          await _launchUrl(item.url!, context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("${item.title} belum tersedia")),
@@ -204,6 +219,7 @@ class _HomeMenuItem {
   final IconData icon;
   final String title;
   final Widget? page;
+  final String? url;
 
-  const _HomeMenuItem(this.icon, this.title, this.page);
+  const _HomeMenuItem(this.icon, this.title, this.page, this.url);
 }
