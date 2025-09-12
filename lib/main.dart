@@ -82,7 +82,7 @@ class PanduISIApp extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
       ),
-      home: const HomePage(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

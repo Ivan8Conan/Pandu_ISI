@@ -111,7 +111,7 @@ class _LayananPageState extends State<LayananPage> {
             elevation: 4,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
             color: Colors.white,
-            shadowColor: const Color(0xFF42A5F5).withOpacity(0.08),
+            shadowColor: const Color(0xFF42A5F5).withOpacity(0.10),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -145,7 +145,7 @@ class _LayananPageState extends State<LayananPage> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: const Color(0xFF42A5F5).withOpacity(0.18),
+                color: const Color(0xFF42A5F5),
                 width: 1.2,
               ),
             ),
@@ -261,18 +261,18 @@ class _LayananPageState extends State<LayananPage> {
             }
           },
           borderRadius: BorderRadius.circular(16),
-          splashColor: const Color(0xFF42A5F5).withOpacity(0.10),
+          splashColor: const Color(0xFF42A5F5),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: const Color(0xFF42A5F5).withOpacity(0.18),
+                color: const Color.fromARGB(255, 159, 198, 230).withOpacity(0.18),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF42A5F5).withOpacity(0.07),
+                  color: const Color(0xFF42A5F5).withOpacity(0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
