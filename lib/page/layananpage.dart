@@ -102,8 +102,8 @@ class _LayananPageState extends State<LayananPage> {
             Text(
               "Layanan",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+                // fontWeight: FontWeight.bold,
+                fontSize: 21,
                 color: Colors.white,
               ),
             ),
