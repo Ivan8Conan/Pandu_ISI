@@ -53,6 +53,13 @@ class _LayananPageState extends State<LayananPage> {
     _filteredList = _getListByKategori(_selectedKategori);
   }
 
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 900));
+    setState(() {
+      _filteredList = _getListByKategori(_selectedKategori);
+    });
+  }
+
   List<ServiceItem> _getListByKategori(LayananKategori kategori) {
     switch (kategori) {
       case LayananKategori.pendidikan:
@@ -104,8 +111,11 @@ class _LayananPageState extends State<LayananPage> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          physics: const AlwaysScrollableScrollPhysics(),
         children: [
           Card(
             elevation: 4,
@@ -211,7 +221,7 @@ class _LayananPageState extends State<LayananPage> {
                     ),
                   ),
                 )
-              : GridView.builder(
+                : GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -225,8 +235,9 @@ class _LayananPageState extends State<LayananPage> {
                     return _buildServiceCard(context, _filteredList[index]);
                   },
                 ),
-        ],
-      ),
+              ],
+            ),
+          ),
     );
   }
 

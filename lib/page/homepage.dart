@@ -15,14 +15,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    _HomeMenuGrid(),
-    TentangPage(),
+  final List<Widget> _pages = [
+    _HomeMenuGrid(key: UniqueKey()),
+    const TentangPage(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 900));
+    setState(() {
+      _pages[0] = _HomeMenuGrid(key: UniqueKey());
     });
   }
 
@@ -51,7 +58,17 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: _pages[_selectedIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        switchInCurve: Curves.easeOutBack,
+        switchOutCurve: Curves.easeIn,
+        child: _selectedIndex == 0
+            ? RefreshIndicator(
+                onRefresh: _refresh,
+                child: _pages[0],
+              )
+            : _pages[1],
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -90,7 +107,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class _HomeMenuGrid extends StatelessWidget {
-  const _HomeMenuGrid();
+  const _HomeMenuGrid({Key? key}) : super(key: key);
 
   final List<_HomeMenuItem> menuItems = const [
     _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage(), null),
@@ -161,7 +178,18 @@ class _HomeMenuGrid extends StatelessWidget {
           itemCount: menuItems.length,
           itemBuilder: (context, index) {
             final item = menuItems[index];
-            return _buildMenuCard(context, item);
+            return TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.95, end: 1.0),
+              duration: Duration(milliseconds: 350 + index * 60),
+              curve: Curves.easeOutBack,
+              builder: (context, scale, child) {
+                return Transform.scale(
+                  scale: scale,
+                  child: child,
+                );
+              },
+              child: _buildMenuCard(context, item),
+            );
           },
         ),
       ],
