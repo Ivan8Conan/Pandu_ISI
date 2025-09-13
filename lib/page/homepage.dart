@@ -190,8 +190,6 @@ class HomeHeader extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-
-              // Welcome message section (replacing quick actions)
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -258,43 +256,232 @@ class _HomeMenuGrid extends StatelessWidget {
     }
   }
 
+  final List<Map<String, dynamic>> promoBanners = const [
+    {
+      'title': 'PAYDAY',
+      'subtitle': 'Menangkan hadiah uang tunai',
+      'amount': 'Rp 1JT',
+      'frequency': 'setiap hari',
+      'buttonText': 'SERBU SEKARANG',
+      'backgroundColor': Color(0xFF007BFF),
+      'accentColor': Colors.amber,
+      'icon1': Icons.games,
+      'icon2': Icons.play_circle_fill,
+      'icon3': Icons.monetization_on,
+    },
+    {
+      'title': 'FLASH SALE',
+      'subtitle': 'Dapatkan diskon hingga',
+      'amount': '50%',
+      'frequency': 'hari ini saja!',
+      'buttonText': 'LIHAT PROMO',
+      'backgroundColor': Color(0xFFE53935), // Merah
+      'accentColor': Colors.yellow,
+      'icon1': Icons.flash_on,
+      'icon2': Icons.shopping_bag,
+      'icon3': Icons.discount,
+    },
+    {
+      'title': 'NEW USER',
+      'subtitle': 'Bonus saldo untuk pengguna baru',
+      'amount': 'Rp 25K',
+      'frequency': 'sekarang!',
+      'buttonText': 'DAFTAR SEKARANG',
+      'backgroundColor': Color(0xFF43A047), // Hijau
+      'accentColor': Colors.lightBlueAccent,
+      'icon1': Icons.person_add,
+      'icon2': Icons.card_giftcard,
+      'icon3': Icons.wallet_giftcard,
+    },
+  ];
+  
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(20.0),
-      children: [
-        const SizedBox(height: 10),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.0,
+    return Container(
+      color: Colors.white,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), 
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 3,
+              mainAxisSpacing: 3,
+              childAspectRatio: 1.0,
+            ),
+            itemCount: menuItems.length,
+            itemBuilder: (context, index) {
+              final item = menuItems[index];
+              return TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: Duration(milliseconds: 350 + index * 100),
+                curve: Curves.easeOutBack,
+                builder: (context, value, child) {
+                  return Transform.scale(
+                    scale: 0.7 + (value * 0.3),
+                    child: Opacity(
+                      opacity: value.clamp(0.0, 1.0),
+                      child: child,
+                    ),
+                  );
+                },
+                child: _buildMenuCard(context, item),
+              );
+            },
           ),
-          itemCount: menuItems.length,
-          itemBuilder: (context, index) {
-            final item = menuItems[index];
-            return TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: 1.0),
-              duration: Duration(milliseconds: 350 + index * 100),
-              curve: Curves.easeOutBack,
-              builder: (context, value, child) {
-                return Transform.scale(
-                  scale: 0.7 + (value * 0.3), // Scale from 0.7 to 1.0
-                  child: Opacity(
-                    opacity: value.clamp(0.0, 1.0), // Ensure opacity is between 0.0 and 1.0
-                    child: child,
-                  ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 180,
+            child: PageView.builder(
+              itemCount: promoBanners.length, // Jumlah banner dummy
+              itemBuilder: (context, index) {
+                final bannerData = promoBanners[index];
+                return Padding(
+                  padding: EdgeInsets.only(right: index == promoBanners.length -1 ? 0 : 8.0), // Beri jarak antar banner
+                  child: _buildSinglePromoBanner(context, bannerData),
                 );
               },
-              child: _buildMenuCard(context, item),
-            );
-          },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> bannerData) {
+    return Container(
+      height: 180, //tinggi banner
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: bannerData['backgroundColor'], // Warna biru dasar
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 5)
+          )
+        ]
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            // Gambar-gambar ikon aplikasi di belakang (sebagai placeholder)
+            Positioned(
+              right: -20,
+              top: -10,
+              child: Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  shape: BoxShape.circle
+                ),
+              ),
+            ),
+             Positioned(
+              right: 10,
+              bottom: -30,
+              child: Icon(bannerData['icon1'], color: Colors.white.withOpacity(0.2), size: 80),
+            ),
+             Positioned(
+              right: 60,
+              top: 10,
+              child: Icon(bannerData['icon2'], color: Colors.white.withOpacity(0.2), size: 50),
+            ),
+            Positioned(
+              left: -30,
+              bottom: -20,
+              child: Icon(bannerData['icon3'], color: Colors.white.withOpacity(0.2), size: 100),
+            ),
+
+            // Konten utama banner
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Teks PAYDAY
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: bannerData['accentColor'],
+                            borderRadius: BorderRadius.circular(4)
+                          ),
+                          child: Text(
+                            bannerData['title'],
+                            style: const TextStyle(
+                              color: Color(0xFF0056B3), // Warna biru gelap untuk teks di accent color
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        // Teks utama
+                        Text(
+                          bannerData['subtitle'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        // Teks harga
+                        Text(
+                          bannerData['amount'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                        Text(
+                          bannerData['frequency'],
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Tombol Aksi
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // TODO: Tambahkan aksi untuk tombol banner
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: bannerData['accentColor'],
+                          foregroundColor: const Color(0xFF0056B3),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16)
+                        ),
+                        child: Text(
+                          bannerData['buttonText'],
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
         ),
-        const SizedBox(height: 20),
-      ],
+      ),
     );
   }
 
@@ -326,21 +513,6 @@ class _HomeMenuGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.06),
-                blurRadius: 20,
-                offset: const Offset(0, 2),
-              ),
-            ],
-            border: Border.all(
-              color: const Color(0xFFF0F0F0),
-              width: 1,
-            ),
-          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -357,13 +529,6 @@ class _HomeMenuGrid extends StatelessWidget {
                     ],
                   ),
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: item.color.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
                 ),
                 child: Icon(
                   item.icon,
