@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SurveiPage extends StatefulWidget {
-  const SurveiPage({Key? key}) : super(key: key);
+  const SurveiPage({super.key});
 
   @override
   State<SurveiPage> createState() => _SurveiPageState();

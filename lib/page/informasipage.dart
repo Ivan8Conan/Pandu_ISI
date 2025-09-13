@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InformasiPage extends StatefulWidget {
-  const InformasiPage({Key? key}) : super(key: key);
+  const InformasiPage({super.key});
 
   @override
   State<InformasiPage> createState() => _InformasiPageState();
@@ -90,7 +90,7 @@ class _InformasiPageState extends State<InformasiPage> {
               ),
             ),
             const SizedBox(height: 24),
-            ...infoItems.map((item) => _buildInfoCard(context, item)).toList(),
+            ...infoItems.map((item) => _buildInfoCard(context, item)),
           ],
         ),
       ),
