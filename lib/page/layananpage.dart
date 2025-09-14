@@ -8,7 +8,8 @@ class ServiceItem {
   final IconData icon;
   final String title;
   final String url;
-  const ServiceItem({required this.icon, required this.title, required this.url});
+  final Color color;
+  const ServiceItem({required this.icon, required this.title, required this.url, required this.color});
 }
 
 class LayananPage extends StatefulWidget {
@@ -20,27 +21,27 @@ class LayananPage extends StatefulWidget {
 
 class _LayananPageState extends State<LayananPage> {
   static const List<ServiceItem> layananPendidikan = [
-    ServiceItem(icon: Icons.school_outlined, title: 'KRS Online', url: 'https://siak.isi.ac.id/'),
-    ServiceItem(icon: Icons.person_add_alt_1_outlined, title: 'e-Admisi PMB', url: 'https://espmi.isi.ac.id/'),
-    ServiceItem(icon: Icons.cast_for_education_outlined, title: 'e-Learning', url: 'https://elearning.isi.ac.id/'),
-    ServiceItem(icon: Icons.workspace_premium_outlined, title: 'Wisuda', url: 'https://wisuda.isi.ac.id/'),
-    ServiceItem(icon: Icons.document_scanner_outlined, title: 'e-SMPI', url: 'https://espmi.isi.ac.id/'),
-    ServiceItem(icon: Icons.class_outlined, title: 'Open Class', url: 'https://openclass.isi.ac.id/'),
+    ServiceItem(icon: Icons.school_outlined, title: 'KRS Online', url: 'https://siak.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.person_add_alt_1_outlined, title: 'e-Admisi PMB', url: 'https://espmi.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.cast_for_education_outlined, title: 'e-Learning', url: 'https://elearning.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.workspace_premium_outlined, title: 'Wisuda', url: 'https://wisuda.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.document_scanner_outlined, title: 'e-SMPI', url: 'https://espmi.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.class_outlined, title: 'Open Class', url: 'https://openclass.isi.ac.id/', color: Color(0xFF0099FF)),
   ];
 
   static const List<ServiceItem> layananMahasiswa = [
-    ServiceItem(icon: Icons.savings_outlined, title: 'Beasiswa', url: 'https://www.isi.ac.id/pendidikan/student-services/scholarship/'),
-    ServiceItem(icon: Icons.work_outline, title: 'Karir dan Kewirausahaan', url: 'https://ppkk.isi.ac.id/'),
-    ServiceItem(icon: Icons.emoji_events_outlined, title: 'Prestasi Mahasiswa', url: 'https://www.isi.ac.id/pendidikan/student-services/student-achievement/'),
-    ServiceItem(icon: Icons.groups_outlined, title: 'Organisasi Kemahasiswaan', url: 'https://www.isi.ac.id/pendidikan/student-services/student-organizations/'),
-    ServiceItem(icon: Icons.people_alt_outlined, title: 'Alumni', url: 'https://www.isi.ac.id/pendidikan/student-services/alumni/'),
-    ServiceItem(icon: Icons.analytics_outlined, title: 'Tracer Study', url: 'https://tracerstudy.kemdikbud.go.id/'),
+    ServiceItem(icon: Icons.savings_outlined, title: 'Beasiswa', url: 'https://www.isi.ac.id/pendidikan/student-services/scholarship/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.work_outline, title: 'Karir dan Kewirausahaan', url: 'https://ppkk.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.emoji_events_outlined, title: 'Prestasi Mahasiswa', url: 'https://www.isi.ac.id/pendidikan/student-services/student-achievement/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.groups_outlined, title: 'Organisasi Kemahasiswaan', url: 'https://www.isi.ac.id/pendidikan/student-services/student-organizations/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.people_alt_outlined, title: 'Alumni', url: 'https://www.isi.ac.id/pendidikan/student-services/alumni/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.analytics_outlined, title: 'Tracer Study', url: 'https://tracerstudy.kemdikbud.go.id/', color: Color(0xFF0099FF)),
   ];
 
   static const List<ServiceItem> layananPerpustakaan = [
-    ServiceItem(icon: Icons.article_outlined, title: 'e-Journal', url: 'https://journal.isi.ac.id/'),
-    ServiceItem(icon: Icons.folder_zip_outlined, title: 'DIGILIB Repository', url: 'https://digilib.isi.ac.id/'),
-    ServiceItem(icon: Icons.menu_book_outlined, title: 'OPAC', url: 'https://opac.isi.ac.id/#gsc.tab=0'),
+    ServiceItem(icon: Icons.article_outlined, title: 'e-Journal', url: 'https://journal.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.folder_zip_outlined, title: 'DIGILIB Repository', url: 'https://digilib.isi.ac.id/', color: Color(0xFF0099FF)),
+    ServiceItem(icon: Icons.menu_book_outlined, title: 'OPAC', url: 'https://opac.isi.ac.id/#gsc.tab=0', color: Color(0xFF0099FF)),
   ];
 
   final TextEditingController _searchController = TextEditingController();
@@ -226,9 +227,9 @@ class _LayananPageState extends State<LayananPage> {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.9,
+                    crossAxisSpacing: 6,
+                    mainAxisSpacing: 6,
+                    childAspectRatio: 1.2,
                   ),
                   itemCount: _filteredList.length,
                   itemBuilder: (context, index) {
@@ -272,39 +273,32 @@ class _LayananPageState extends State<LayananPage> {
             }
           },
           borderRadius: BorderRadius.circular(16),
-          splashColor: const Color(0xFF42A5F5),
+          splashColor: item.color.withOpacity(0.3),
           child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color.fromARGB(255, 159, 198, 230).withOpacity(0.18),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF42A5F5).withOpacity(0.08),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF42A5F5),
-                    shape: BoxShape.circle,
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        item.color,
+                        item.color.withOpacity(0.8),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     item.icon,
-                    size: 22,
+                    size: 24,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 6),
                 Text(
                   item.title,
                   textAlign: TextAlign.center,

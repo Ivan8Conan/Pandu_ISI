@@ -309,7 +309,7 @@ class _HomeMenuGrid extends StatelessWidget {
               crossAxisCount: 3,
               crossAxisSpacing: 3,
               mainAxisSpacing: 3,
-              childAspectRatio: 1.0,
+              childAspectRatio: 1.2,
             ),
             itemCount: menuItems.length,
             itemBuilder: (context, index) {
@@ -459,7 +459,6 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          // TODO: Tambahkan aksi untuk tombol banner
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: bannerData['accentColor'],

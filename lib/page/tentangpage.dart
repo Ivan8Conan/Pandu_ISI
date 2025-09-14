@@ -12,8 +12,8 @@ class TentangPage extends StatelessWidget {
     {'title': 'Statuta', 'icon': Icons.gavel_outlined, 'color': Color(0xFF6699FF)},
     {'title': 'Renstra', 'icon': Icons.assessment_outlined, 'color': Color(0xFFFF6B9D)},
     {'title': 'OTK', 'icon': Icons.architecture_outlined, 'color': Color(0xFF9C27B0)},
-    {'title': 'Perjanjian Kinerja Rektor', 'icon': Icons.assignment_turned_in_outlined, 'color': Color(0xFF42A5F5)},
-    {'title': 'Laporan Kinerja', 'icon': Icons.receipt_long_outlined, 'color': Color(0xFF0088EE)},
+    {'title': 'Perjanjian Kinerja Rektor', 'icon': Icons.assignment_turned_in_outlined, 'color': Color.fromARGB(255, 145, 96, 48)},
+    {'title': 'Laporan Kinerja', 'icon': Icons.receipt_long_outlined, 'color': Color(0xFFFFCC00)},
   ];
 
   // Fungsi helper untuk membuka URL di browser eksternal
