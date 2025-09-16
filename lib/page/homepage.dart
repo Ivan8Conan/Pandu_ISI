@@ -293,7 +293,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
         "https://pandu.isi.ac.id/sop/SOP%20ISI%20Yogyakarta.html", Color(0xFFFF8800)),
     _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null, Color(0xFF6699FF)),
     _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null, Color(0xFFFF6B9D)),
-    _HomeMenuItem(Icons.assignment_outlined, "Laporan", null, null, Color(0xFF9C27B0)),
+    _HomeMenuItem(Icons.assignment_outlined, "Permohonan", null, null, Color(0xFF9C27B0)),
   ];
 
   Future<void> _launchUrl(String url, BuildContext context) async {
@@ -341,6 +341,18 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
       'icon1': Icons.person_add,
       'icon2': Icons.card_giftcard,
       'icon3': Icons.wallet_giftcard,
+    },
+    {
+    'title': 'AI UPDATE',
+    'subtitle': 'Eksplor fitur terbaru AI',
+    'amount': 'Gratis',
+    'frequency': 'khusus minggu ini',
+    'buttonText': 'COBA SEKARANG',
+    'backgroundColor': Color(0xFF6A1B9A), // Ungu
+    'accentColor': Colors.cyanAccent,
+    'icon1': Icons.smart_toy,
+    'icon2': Icons.auto_graph,
+    'icon3': Icons.lightbulb_outline,
     },
   ];
   
@@ -549,8 +561,19 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("${item.title} belum tersedia"),
-                backgroundColor: Colors.orange,
+                content: Row(
+                  children: [
+                    const Icon(Icons.warning_amber_rounded, color: Colors.white),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "Fitur ${item.title} belum tersedia",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                backgroundColor: const Color(0xFF2196F3),
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
