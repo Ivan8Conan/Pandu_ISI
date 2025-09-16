@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'layananpage.dart';
 import 'tentangpage.dart';
@@ -40,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           if (_selectedIndex == 0) const HomeHeader(),
-          Expanded(
+         Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 350),
               switchInCurve: Curves.easeOutBack,
@@ -48,7 +50,19 @@ class _HomePageState extends State<HomePage> {
               child: _selectedIndex == 0
                   ? RefreshIndicator(
                       onRefresh: _refresh,
-                      child: _pages[0],
+                      child: Transform.translate(
+                        offset: const Offset(0, -20), // ✅ aman: hanya menggeser tampilan
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
+                          ),
+                          child: _pages[0],
+                        ),
+                      ),
                     )
                   : _pages[1],
             ),
@@ -104,15 +118,11 @@ class HomeHeader extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [Color(0xFF0099FF), Color(0xFF0088EE)],
         ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
           child: Column(
             children: [
               // Top section with profile and notification
@@ -233,8 +243,47 @@ class HomeHeader extends StatelessWidget {
   }
 }
 
-class _HomeMenuGrid extends StatelessWidget {
+class _HomeMenuGrid extends StatefulWidget {
   const _HomeMenuGrid({super.key});
+
+  @override
+  State<_HomeMenuGrid> createState() => _HomeMenuGridState();
+}
+
+class _HomeMenuGridState extends State<_HomeMenuGrid> {
+  final PageController _pageController = PageController(viewportFraction: 0.95);
+  int _currentPage = 0;
+  late final Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (_pageController.hasClients) {
+        _currentPage++;
+        if (_currentPage >= promoBanners.length) {
+          _currentPage = 0;
+        }
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
 
   final List<_HomeMenuItem> menuItems = const [
     _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage(), null, Color(0xFF0099FF)),
@@ -298,7 +347,7 @@ class _HomeMenuGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Colors.transparent,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), 
         children: [
@@ -335,11 +384,12 @@ class _HomeMenuGrid extends StatelessWidget {
           SizedBox(
             height: 180,
             child: PageView.builder(
-              itemCount: promoBanners.length, // Jumlah banner dummy
+              controller: _pageController,
+              itemCount: promoBanners.length,
               itemBuilder: (context, index) {
                 final bannerData = promoBanners[index];
                 return Padding(
-                  padding: EdgeInsets.only(right: index == promoBanners.length -1 ? 0 : 8.0), // Beri jarak antar banner
+                  padding: EdgeInsets.only(right: index == promoBanners.length - 1 ? 0 : 8.0),
                   child: _buildSinglePromoBanner(context, bannerData),
                 );
               },
@@ -355,7 +405,7 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
       height: 180, //tinggi banner
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: bannerData['backgroundColor'], // Warna biru dasar
+        color: bannerData['backgroundColor'],
         boxShadow: [
           BoxShadow(
             color: Colors.blue.withOpacity(0.3),
@@ -417,7 +467,7 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                           child: Text(
                             bannerData['title'],
                             style: const TextStyle(
-                              color: Color(0xFF0056B3), // Warna biru gelap untuk teks di accent color
+                              color: Color(0xFF0056B3),
                               fontWeight: FontWeight.bold,
                               fontSize: 12
                             ),
