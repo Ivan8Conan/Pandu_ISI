@@ -402,17 +402,38 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
                 final bannerData = promoBanners[index];
                 return Padding(
                   padding: EdgeInsets.only(right: index == promoBanners.length - 1 ? 0 : 8.0),
-                  child: _buildSinglePromoBanner(context, bannerData),
+                  child: _buildDynamicPromoBanner(context, bannerData),
                 );
               },
             ),
+          ),
+          const SizedBox(height: 20),
+          _buildStaticPromoBanner(
+            title: 'PPID',
+            description: 'PPID ISI Yogyakarta kelola layanan informasi publik.',
+            backgroundImage: 'assets/images/loket-ppid.jpg',
+            icon: Icons.account_balance,
+          ),
+          const SizedBox(height: 12),
+          _buildStaticPromoBanner(
+            title: 'Informasi Publik Terkini',
+            description: 'Temukan informasi terkini dari Institut Seni Indonesia Yogyakarta.',
+            backgroundImage: 'assets/images/museum-sonobudoyo-2-scaled.webp',
+            icon: Icons.info,
+          ),
+          const SizedBox(height: 12),
+          _buildStaticPromoBanner(
+            title: 'Kolaborasi dan Kerjasama',
+            description: 'Kolaborasi seni ISI Yogyakarta berskala nasional-internasional.',
+            backgroundImage: 'assets/images/backgroundPanduApp.JPG',
+            icon: Icons.handshake,
           ),
         ],
       ),
     );
   }
 
-Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> bannerData) {
+Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> bannerData) {
     return Container(
       height: 180, //tinggi banner
       decoration: BoxDecoration(
@@ -469,7 +490,6 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Teks PAYDAY
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
@@ -486,7 +506,6 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // Teks utama
                         Text(
                           bannerData['subtitle'],
                           style: const TextStyle(
@@ -495,7 +514,6 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        // Teks harga
                         Text(
                           bannerData['amount'],
                           style: const TextStyle(
@@ -515,7 +533,6 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                       ],
                     ),
                   ),
-                  // Tombol Aksi
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -540,6 +557,79 @@ Widget _buildSinglePromoBanner(BuildContext context, Map<String, dynamic> banner
                 ],
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStaticPromoBanner({
+    required String title,
+    required String description,
+    required String backgroundImage,
+    required IconData icon,
+    double darkenOpacity = 0.5,
+  }) {
+    return Container(
+      height: 140,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        image: DecorationImage(
+          image: AssetImage(backgroundImage),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(darkenOpacity),
+            BlendMode.darken,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 48, color: Colors.white),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          description,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 14,
+                            height: 1.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
