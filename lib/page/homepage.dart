@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                   ? RefreshIndicator(
                       onRefresh: _refresh,
                       child: Transform.translate(
-                        offset: const Offset(0, -20), // ✅ aman: hanya menggeser tampilan
+                        offset: const Offset(0, -20),
                         child: Container(
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -577,6 +577,7 @@ Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> banne
         image: DecorationImage(
           image: AssetImage(backgroundImage),
           fit: BoxFit.cover,
+          alignment: Alignment.topLeft,
           colorFilter: ColorFilter.mode(
             Colors.black.withOpacity(darkenOpacity),
             BlendMode.darken,
