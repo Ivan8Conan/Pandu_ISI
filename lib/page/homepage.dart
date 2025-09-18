@@ -5,6 +5,7 @@ import 'layananpage.dart';
 import 'tentangpage.dart';
 import 'informasipage.dart';
 import 'surveipage.dart';
+import 'ppidpage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -125,7 +126,7 @@ class HomeHeader extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
           child: Column(
             children: [
-              // Top section with profile and notification
+              // Top section
               Row(
                 children: [
                   Container(
@@ -407,12 +408,18 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           _buildStaticPromoBanner(
             title: 'PPID',
             description: 'PPID ISI Yogyakarta kelola layanan informasi publik.',
             backgroundImage: 'assets/images/loket-ppid - Copy.jpg',
             icon: Icons.account_balance,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PPIDPage()),
+              );
+            },
           ),
           const SizedBox(height: 12),
           _buildStaticPromoBanner(
@@ -420,6 +427,15 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
             description: 'Temukan informasi terkini dari Institut Seni Indonesia Yogyakarta.',
             backgroundImage: 'assets/images/museum-sonobudoyo-2-scaled - Copy.webp',
             icon: Icons.info,
+            onTap: () async {
+              const url = 'https://www.isi.ac.id/arsip/';
+              final uri = Uri.parse(url);
+              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Gagal membuka link")),
+                );
+              }
+            },
           ),
           const SizedBox(height: 12),
           _buildStaticPromoBanner(
@@ -427,6 +443,15 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
             description: 'Kolaborasi seni ISI Yogyakarta berskala nasional-internasional.',
             backgroundImage: 'assets/images/backgroundPanduApp - Copy.JPG',
             icon: Icons.handshake,
+            onTap: () async {
+              const url = 'https://www.isi.ac.id/collaboration/';
+              final uri = Uri.parse(url);
+              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Gagal membuka link")),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -569,69 +594,73 @@ Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> banne
     required String backgroundImage,
     required IconData icon,
     double darkenOpacity = 0.5,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      height: 140,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        image: DecorationImage(
-          image: AssetImage(backgroundImage),
-          fit: BoxFit.cover,
-          alignment: Alignment.topLeft,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(darkenOpacity),
-            BlendMode.darken,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 140,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          image: DecorationImage(
+            image: AssetImage(backgroundImage),
+            fit: BoxFit.cover,
+            alignment: Alignment.topLeft,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(darkenOpacity),
+              BlendMode.darken,
+            ),
           ),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(icon, size: 48, color: Colors.white),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          description,
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 14,
-                            height: 1.3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(icon, size: 48, color: Colors.white),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            description,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 14,
+                              height: 1.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
