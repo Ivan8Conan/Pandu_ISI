@@ -412,7 +412,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
           _buildStaticPromoBanner(
             title: 'PPID',
             description: 'PPID ISI Yogyakarta kelola layanan informasi publik.',
-            backgroundImage: 'assets/images/loket-ppid - Copy.jpg',
+            backgroundImage: 'assets/images/PPID_fixed.jpg',
             icon: Icons.account_balance,
             onTap: () {
               Navigator.push(
@@ -425,7 +425,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
           _buildStaticPromoBanner(
             title: 'Informasi Publik Terkini',
             description: 'Temukan informasi terkini dari Institut Seni Indonesia Yogyakarta.',
-            backgroundImage: 'assets/images/museum-sonobudoyo-2-scaled - Copy.webp',
+            backgroundImage: 'assets/images/Info_fixed.jpg',
             icon: Icons.info,
             onTap: () async {
               const url = 'https://www.isi.ac.id/arsip/';
@@ -441,7 +441,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
           _buildStaticPromoBanner(
             title: 'Kolaborasi dan Kerjasama',
             description: 'Kolaborasi seni ISI Yogyakarta berskala nasional-internasional.',
-            backgroundImage: 'assets/images/backgroundPanduApp - Copy.JPG',
+            backgroundImage: 'assets/images/KolabKerjasama_fixed.jpg',
             icon: Icons.handshake,
             onTap: () async {
               const url = 'https://www.isi.ac.id/collaboration/';
