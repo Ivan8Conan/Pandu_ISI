@@ -61,9 +61,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/museum-sonobudoyo-2-scaled.webp
-    - assets/images/loket-ppid.jpg
-    - assets/images/backgroundPanduApp.JPG
+    - assets/images/museum-sonobudoyo-2-scaled - Copy.webp
+    - assets/images/loket-ppid - Copy.jpg
+    - assets/images/backgroundPanduApp - Copy.JPG
     - assets/images/LOGO-ISI.png
 
 
