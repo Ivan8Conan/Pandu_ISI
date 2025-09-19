@@ -341,7 +341,7 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
         ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.9),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       ),
     );
   }
@@ -387,7 +387,7 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
         ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.9),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 9, vertical: 9),
       ),
       items: items.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
