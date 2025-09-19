@@ -330,7 +330,7 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
     String? Function(String?)? validator,
   }) {
     return DropdownButtonFormField<String>(
-      initialValue: value,
+      value: value,
       onChanged: onChanged,
       validator: validator,
       decoration: InputDecoration(
