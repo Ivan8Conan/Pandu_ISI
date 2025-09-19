@@ -7,6 +7,7 @@ import 'tentangpage.dart';
 import 'informasipage.dart';
 import 'surveipage.dart';
 import 'ppidpage.dart';
+import 'permohonanpage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -287,15 +288,15 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
   }
 
 
-  final List<_HomeMenuItem> menuItems = const [
-    _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage(), null, Color(0xFF0099FF)),
-    _HomeMenuItem(Icons.gavel_outlined, "Regulasi", null,
+  final List<_HomeMenuItem> menuItems = [
+    const _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage(), null, Color(0xFF0099FF)),
+    const _HomeMenuItem(Icons.gavel_outlined, "Regulasi", null,
         "https://pandu.isi.ac.id/regulasi-dan-rancangan-regulasi/", Color(0xFF00CC88)),
-    _HomeMenuItem(Icons.rule_folder_outlined, "SOP", null,
+    const _HomeMenuItem(Icons.rule_folder_outlined, "SOP", null,
         "https://pandu.isi.ac.id/sop/SOP%20ISI%20Yogyakarta.html", Color(0xFFFF8800)),
-    _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null, Color(0xFF6699FF)),
-    _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null, Color(0xFFFF6B9D)),
-    _HomeMenuItem(Icons.assignment_outlined, "Permohonan", null, null, Color(0xFF9C27B0)),
+    const _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null, Color(0xFF6699FF)),
+    const _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null, Color(0xFFFF6B9D)),
+    _HomeMenuItem(Icons.assignment_outlined, "Permohonan", PermohonanInformasiPage(), null, const Color(0xFF9C27B0)),
   ];
 
   Future<void> _launchUrl(String url, BuildContext context) async {
@@ -367,7 +368,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => PPIDPage()),
+                MaterialPageRoute(builder: (_) => const PPIDPage()),
               );
             },
           ),
