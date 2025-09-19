@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:panduisi_app/item/banneritem';
+import 'package:panduisi_app/page/historypermohonanpage.dart';
 import 'layananpage.dart';
 import 'tentangpage.dart';
 import 'informasipage.dart';
@@ -187,17 +188,22 @@ class HomeHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.white,
-                      size: 18,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const PermohonanHistoryPage()));
+                    },
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.receipt_long_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ],
