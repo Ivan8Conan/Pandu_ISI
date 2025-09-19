@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:panduisi_app/item/banneritem';
 import 'layananpage.dart';
 import 'tentangpage.dart';
 import 'informasipage.dart';
@@ -305,57 +306,6 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
       );
     }
   }
-
-  final List<Map<String, dynamic>> promoBanners = const [
-    {
-      'title': 'PAYDAY',
-      'subtitle': 'Menangkan hadiah uang tunai',
-      'amount': 'Rp 1JT',
-      'frequency': 'setiap hari',
-      'buttonText': 'SERBU SEKARANG',
-      'backgroundColor': Color(0xFF007BFF),
-      'accentColor': Colors.amber,
-      'icon1': Icons.games,
-      'icon2': Icons.play_circle_fill,
-      'icon3': Icons.monetization_on,
-    },
-    {
-      'title': 'FLASH SALE',
-      'subtitle': 'Dapatkan diskon hingga',
-      'amount': '50%',
-      'frequency': 'hari ini saja!',
-      'buttonText': 'LIHAT PROMO',
-      'backgroundColor': Color(0xFFE53935), // Merah
-      'accentColor': Colors.yellow,
-      'icon1': Icons.flash_on,
-      'icon2': Icons.shopping_bag,
-      'icon3': Icons.discount,
-    },
-    {
-      'title': 'NEW USER',
-      'subtitle': 'Bonus saldo untuk pengguna baru',
-      'amount': 'Rp 25K',
-      'frequency': 'sekarang!',
-      'buttonText': 'DAFTAR SEKARANG',
-      'backgroundColor': Color(0xFF43A047), // Hijau
-      'accentColor': Colors.lightBlueAccent,
-      'icon1': Icons.person_add,
-      'icon2': Icons.card_giftcard,
-      'icon3': Icons.wallet_giftcard,
-    },
-    {
-    'title': 'AI UPDATE',
-    'subtitle': 'Eksplor fitur terbaru AI',
-    'amount': 'Gratis',
-    'frequency': 'khusus minggu ini',
-    'buttonText': 'COBA SEKARANG',
-    'backgroundColor': Color(0xFF6A1B9A), // Ungu
-    'accentColor': Colors.cyanAccent,
-    'icon1': Icons.smart_toy,
-    'icon2': Icons.auto_graph,
-    'icon3': Icons.lightbulb_outline,
-    },
-  ];
   
   @override
   Widget build(BuildContext context) {
