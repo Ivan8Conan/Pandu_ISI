@@ -12,6 +12,8 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
   final _nikController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _noteleponController = TextEditingController();
   final _alamatController = TextEditingController();
   final _pekerjaanController = TextEditingController();
   final _informasiController = TextEditingController();
@@ -115,8 +117,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         ),
                       ),
                       const SizedBox(height: 32),
-
-                      // Nama
                       _buildTextFormField(
                         controller: _namaController,
                         label: 'Nama Lengkap',
@@ -130,8 +130,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         autofillHints: const [AutofillHints.name],
                       ),
                       const SizedBox(height: 18),
-
-                      // Jenis Pelapor
                       _buildDropdownField(
                         label: 'Jenis Pelapor',
                         icon: Icons.business,
@@ -150,8 +148,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         },
                       ),
                       const SizedBox(height: 18),
-
-                      // NIK
                       _buildTextFormField(
                         controller: _nikController,
                         label: 'NIK (Nomor Induk Kependudukan)',
@@ -169,8 +165,41 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         autofillHints: const [AutofillHints.telephoneNumber],
                       ),
                       const SizedBox(height: 18),
-
-                      // Alamat
+                      _buildTextFormField(
+                        controller: _emailController,
+                        label: 'Email',
+                        icon: Icons.email,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email tidak boleh kosong';
+                          }
+                          final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                          if (!emailRegex.hasMatch(value)) {
+                            return 'Format email tidak valid';
+                          }
+                          return null;
+                        },
+                        autofillHints: const [AutofillHints.email],
+                      ),
+                      const SizedBox(height: 18),
+                      _buildTextFormField(
+                        controller: _noteleponController,
+                        label: 'No. Telepon',
+                        icon: Icons.phone,
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nomor telepon tidak boleh kosong';
+                          }
+                          if (!RegExp(r'^[0-9]{10,15}$').hasMatch(value)) {
+                            return 'Nomor telepon harus 10-15 digit angka';
+                          }
+                          return null;
+                        },
+                        autofillHints: const [AutofillHints.telephoneNumber],
+                      ),
+                      const SizedBox(height: 18),
                       _buildTextFormField(
                         controller: _alamatController,
                         label: 'Alamat Lengkap',
@@ -185,8 +214,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         autofillHints: const [AutofillHints.fullStreetAddress],
                       ),
                       const SizedBox(height: 18),
-
-                      // Pekerjaan
                       _buildTextFormField(
                         controller: _pekerjaanController,
                         label: 'Pekerjaan',
@@ -200,8 +227,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         autofillHints: const [AutofillHints.jobTitle],
                       ),
                       const SizedBox(height: 18),
-
-                      // Informasi yang diminta
                       _buildTextFormField(
                         controller: _informasiController,
                         label: 'Informasi yang Diminta',
@@ -215,8 +240,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         },
                       ),
                       const SizedBox(height: 18),
-
-                      // Kategori
                       _buildDropdownField(
                         label: 'Kategori Layanan',
                         icon: Icons.category,
@@ -235,8 +258,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         },
                       ),
                       const SizedBox(height: 18),
-
-                      // Tujuan
                       _buildTextFormField(
                         controller: _tujuanController,
                         label: 'Tujuan Permohonan',
@@ -250,7 +271,6 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
                         },
                       ),
                       const SizedBox(height: 32),
-
                       // Submit Button
                       SizedBox(
                         width: double.infinity,
@@ -471,6 +491,8 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
     _formKey.currentState!.reset();
     _namaController.clear();
     _nikController.clear();
+    _emailController.clear();
+    _noteleponController.clear();
     _alamatController.clear();
     _pekerjaanController.clear();
     _informasiController.clear();
