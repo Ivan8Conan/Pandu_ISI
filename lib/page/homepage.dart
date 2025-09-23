@@ -188,24 +188,24 @@ class HomeHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const PermohonanHistoryPage()));
-                    },
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Icon(
-                        Icons.receipt_long_outlined,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(context, MaterialPageRoute(builder: (_) => const PermohonanHistoryPage()));
+                  //   },
+                  //   child: Container(
+                  //     width: 32,
+                  //     height: 32,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white.withOpacity(0.2),
+                  //       borderRadius: BorderRadius.circular(16),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.receipt_long_outlined,
+                  //       color: Colors.white,
+                  //       size: 24,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 24),
@@ -302,7 +302,8 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
         "https://pandu.isi.ac.id/sop/SOP%20ISI%20Yogyakarta.html", Color(0xFFFF8800)),
     const _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null, Color(0xFF6699FF)),
     const _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null, Color(0xFFFF6B9D)),
-    const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", PermohonanInformasiPage(), null, Color(0xFF9C27B0)),
+    // const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", PermohonanInformasiPage(), null, Color(0xFF9C27B0)),
+    const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", null, null, Color(0xFF9C27B0)),
   ];
 
   Future<void> _launchUrl(String url, BuildContext context) async {
@@ -433,7 +434,6 @@ Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> banne
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            // Gambar-gambar ikon aplikasi di belakang (sebagai placeholder)
             Positioned(
               right: -20,
               top: -10,
