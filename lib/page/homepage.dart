@@ -416,53 +416,31 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
     );
   }
 
-Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> bannerData) {
+  Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> bannerData) {
     return Container(
-      height: 180, //tinggi banner
+      height: 180,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: bannerData['backgroundColor'],
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: const Offset(0, 5)
-          )
-        ]
+            offset: const Offset(0, 4),
+          ),
+        ],
+        image: DecorationImage(
+          image: AssetImage(bannerData['backgroundImage']),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.3),
+            BlendMode.darken,
+          ),
+        ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            Positioned(
-              right: -20,
-              top: -10,
-              child: Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  shape: BoxShape.circle
-                ),
-              ),
-            ),
-             Positioned(
-              right: 10,
-              bottom: -30,
-              child: Icon(bannerData['icon1'], color: Colors.white.withOpacity(0.2), size: 80),
-            ),
-             Positioned(
-              right: 60,
-              top: 10,
-              child: Icon(bannerData['icon2'], color: Colors.white.withOpacity(0.2), size: 50),
-            ),
-            Positioned(
-              left: -30,
-              bottom: -20,
-              child: Icon(bannerData['icon3'], color: Colors.white.withOpacity(0.2), size: 100),
-            ),
-
-            // Konten utama banner
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -472,73 +450,29 @@ Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> banne
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: bannerData['accentColor'],
-                            borderRadius: BorderRadius.circular(4)
-                          ),
-                          child: Text(
-                            bannerData['title'],
-                            style: const TextStyle(
-                              color: Color(0xFF0056B3),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12
-                            ),
+                        Text(
+                          bannerData['title'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Text(
                           bannerData['subtitle'],
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          bannerData['amount'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: -1,
-                          ),
-                        ),
-                        Text(
-                          bannerData['frequency'],
-                          style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 12,
+                            fontSize: 14,
+                            height: 1.3,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: bannerData['accentColor'],
-                          foregroundColor: const Color(0xFF0056B3),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 16)
-                        ),
-                        child: Text(
-                          bannerData['buttonText'],
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
