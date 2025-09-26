@@ -260,7 +260,7 @@ class _HomeMenuGrid extends StatefulWidget {
 }
 
 class _HomeMenuGridState extends State<_HomeMenuGrid> {
-  final PageController _pageController = PageController(viewportFraction: 0.95);
+  final PageController _pageController = PageController();
   int _currentPage = 0;
   late final Timer _timer;
 
@@ -273,12 +273,12 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
   void _startAutoSlide() {
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_pageController.hasClients) {
-        _currentPage++;
-        if (_currentPage >= promoBanners.length) {
-          _currentPage = 0;
+        int nextPage = _currentPage + 1;
+        if (nextPage >= promoBanners.length) {
+          nextPage = 0;
         }
         _pageController.animateToPage(
-          _currentPage,
+          nextPage,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
@@ -293,7 +293,6 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
     super.dispose();
   }
 
-
   final List<_HomeMenuItem> menuItems = [
     const _HomeMenuItem(Icons.grid_view_rounded, "Layanan", LayananPage(), null, Color(0xFF0099FF)),
     const _HomeMenuItem(Icons.gavel_outlined, "Regulasi", null,
@@ -302,7 +301,6 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
         "https://pandu.isi.ac.id/sop/SOP%20ISI%20Yogyakarta.html", Color(0xFFFF8800)),
     const _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null, Color(0xFF6699FF)),
     const _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null, Color(0xFFFF6B9D)),
-    // const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", PermohonanInformasiPage(), null, Color(0xFF9C27B0)),
     const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", null, null, Color(0xFF9C27B0)),
   ];
 
@@ -314,328 +312,398 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
       );
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), 
+        padding: const EdgeInsets.symmetric(vertical: 20),
         children: [
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 3,
-              mainAxisSpacing: 3,
-              childAspectRatio: 1.2,
-            ),
-            itemCount: menuItems.length,
-            itemBuilder: (context, index) {
-              final item = menuItems[index];
-              return TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: Duration(milliseconds: 350 + index * 100),
-                curve: Curves.easeOutBack,
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: 0.7 + (value * 0.3),
-                    child: Opacity(
-                      opacity: value.clamp(0.0, 1.0),
-                      child: child,
-                    ),
-                  );
-                },
-                child: _buildMenuCard(context, item),
-              );
-            },
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 180,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: promoBanners.length,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 3,
+                mainAxisSpacing: 3,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: menuItems.length,
               itemBuilder: (context, index) {
-                final bannerData = promoBanners[index];
-                return Padding(
-                  padding: EdgeInsets.only(right: index == promoBanners.length - 1 ? 0 : 8.0),
-                  child: _buildDynamicPromoBanner(context, bannerData),
+                final item = menuItems[index];
+                return TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: Duration(milliseconds: 350 + index * 100),
+                  curve: Curves.easeOutBack,
+                  builder: (context, value, child) {
+                    return Transform.scale(
+                      scale: 0.7 + (value * 0.3),
+                      child: Opacity(
+                        opacity: value.clamp(0.0, 1.0),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: _buildMenuCard(context, item),
                 );
               },
             ),
           ),
-          const SizedBox(height: 16),
-          _buildStaticPromoBanner(
-            title: 'PPID',
-            description: 'PPID ISI Yogyakarta kelola layanan informasi publik.',
-            backgroundImage: 'assets/images/PPID.jpg',
-            icon: Icons.account_balance,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PPIDPage()),
-              );
-            },
-          ),
-          const SizedBox(height: 12),
-          _buildStaticPromoBanner(
-            title: 'Informasi Publik Terkini',
-            description: 'Temukan informasi terkini dari Institut Seni Indonesia Yogyakarta.',
-            backgroundImage: 'assets/images/InfoPublik.jpg',
-            icon: Icons.info,
-            onTap: () async {
-              const url = 'https://www.isi.ac.id/arsip/';
-              final uri = Uri.parse(url);
-              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Gagal membuka link")),
-                );
-              }
-            },
-          ),
-          const SizedBox(height: 12),
-          _buildStaticPromoBanner(
-            title: 'Kolaborasi dan Kerjasama',
-            description: 'Kolaborasi seni ISI Yogyakarta berskala nasional-internasional.',
-            backgroundImage: 'assets/images/Kolaborasi.jpg',
-            icon: Icons.handshake,
-            onTap: () async {
-              const url = 'https://www.isi.ac.id/collaboration/';
-              final uri = Uri.parse(url);
-              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Gagal membuka link")),
-                );
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDynamicPromoBanner(BuildContext context, Map<String, dynamic> bannerData) {
-    return Container(
-      height: 180,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        image: DecorationImage(
-          image: AssetImage(bannerData['backgroundImage']),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3),
-            BlendMode.darken,
-          ),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          bannerData['title'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          bannerData['subtitle'],
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                            height: 1.3,
-                          ),
-                        ),
-                      ],
-                    ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                SizedBox(
+                  height: 180,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: promoBanners.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      final bannerData = promoBanners[index];
+                      return _buildDynamicPromoBanner(context, bannerData);
+                    },
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  bottom: 12,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(promoBanners.length, (index) {
+                      return _buildDot(index: index);
+                    }),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: [
+                _buildStaticPromoBanner(
+                  title: 'PPID',
+                  description: 'PPID ISI Yogyakarta kelola layanan informasi publik.',
+                  backgroundImage: 'assets/images/PPID.jpg',
+                  icon: Icons.account_balance,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const PPIDPage()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                _buildStaticPromoBanner(
+                  title: 'Informasi Publik Terkini',
+                  description:
+                      'Temukan informasi terkini dari Institut Seni Indonesia Yogyakarta.',
+                  backgroundImage: 'assets/images/InfoPublik.jpg',
+                  icon: Icons.info,
+                  onTap: () async {
+                    const url = 'https://www.isi.ac.id/arsip/';
+                    await _launchUrl(url, context);
+                  },
+                ),
+                const SizedBox(height: 12),
+                _buildStaticPromoBanner(
+                  title: 'Kolaborasi dan Kerjasama',
+                  description:
+                      'Kolaborasi seni ISI Yogyakarta berskala nasional-internasional.',
+                  backgroundImage: 'assets/images/Kolaborasi.jpg',
+                  icon: Icons.handshake,
+                  onTap: () async {
+                    const url = 'https://www.isi.ac.id/collaboration/';
+                    await _launchUrl(url, context);
+                  },
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
 
-  Widget _buildStaticPromoBanner({
-    required String title,
-    required String description,
-    required String backgroundImage,
-    required IconData icon,
-    double darkenOpacity = 0.5,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 140,
+  Widget _buildDot({required int index}) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      height: 8,
+      width: _currentPage == index ? 24 : 8,
+      decoration: BoxDecoration(
+        color: _currentPage == index ? Colors.white : Colors.white54,
+        borderRadius: BorderRadius.circular(5),
+      ),
+    );
+  }
+
+  Widget _buildDynamicPromoBanner(
+    BuildContext context, Map<String, dynamic> bannerData) {
+      return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            image: AssetImage(backgroundImage),
-            fit: BoxFit.cover,
-            alignment: Alignment.topLeft,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(darkenOpacity),
-              BlendMode.darken,
-            ),
-          ),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 12,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 48, color: Colors.white),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            description,
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14,
-                              height: 1.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              Positioned.fill(
+                child: Image.asset(
+                  bannerData['backgroundImage'],
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[300]),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuCard(BuildContext context, _HomeMenuItem item) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () async {
-          if (item.page != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => item.page!),
-            );
-          } else if (item.url != null) {
-            await _launchUrl(item.url!, context);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    const Icon(Icons.warning_amber_rounded, color: Colors.white),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        "Fitur ${item.title} belum tersedia",
-                        style: const TextStyle(color: Colors.white),
-                      ),
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.7),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.center,
                     ),
-                  ],
-                ),
-                backgroundColor: const Color(0xFF2196F3),
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            );
-          }
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      item.color,
-                      item.color.withOpacity(0.8),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        bannerData['title'],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          shadows: [
+                            Shadow(blurRadius: 4, color: Colors.black54)
+                          ]
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        bannerData['subtitle'],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          height: 1.3,
+                          shadows: [
+                            Shadow(blurRadius: 4, color: Colors.black54)
+                          ]
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  item.icon,
-                  size: 24,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                item.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Color(0xFF333333),
-                ),
-              ),
+              )
             ],
           ),
         ),
-      ),
-    );
+      );
+    }
+
+    Widget _buildStaticPromoBanner({
+      required String title,
+      required String description,
+      required String backgroundImage,
+      required IconData icon,
+      VoidCallback? onTap,
+    }) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 180,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 12,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    backgroundImage,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey[300],
+                      child: Icon(icon, size: 40, color: Colors.grey[600]),
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,             
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.center,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            shadows: [
+                              Shadow(blurRadius: 4, color: Colors.black54)
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          description,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            height: 1.3,
+                            shadows: [
+                              Shadow(blurRadius: 4, color: Colors.black54)
+                            ],
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildMenuCard(BuildContext context, _HomeMenuItem item) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () async {
+            if (item.page != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => item.page!),
+              );
+            } else if (item.url != null) {
+              await _launchUrl(item.url!, context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      const Icon(Icons.warning_amber_rounded,
+                          color: Colors.white),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          "Fitur ${item.title} belum tersedia",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: const Color(0xFF2196F3),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        item.color,
+                        item.color.withOpacity(0.8),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    item.icon,
+                    size: 24,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  item.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Color(0xFF333333),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
-}
 
 class _HomeMenuItem {
   final IconData icon;

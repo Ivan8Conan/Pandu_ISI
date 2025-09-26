@@ -24,7 +24,7 @@ final List<Map<String, dynamic>> promoBanners = [
   },
   {
     'title': 'Inovasi Layanan Publik',
-    'subtitle': 'ISI Yogyakarta berkomitmen menghadirkan layanan inovatif lewat kegiatan dan platform teknologi.',
+    'subtitle': 'ISI Yogyakarta menghadirkan layanan inovatif lewat kegiatan dan platform teknologi.',
     'backgroundImage': 'assets/images/InovasiLayanan.jpg',
     'onTap': () {
     },

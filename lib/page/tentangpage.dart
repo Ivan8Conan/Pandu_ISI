@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TentangPage extends StatelessWidget {
   const TentangPage({super.key});
 
-  // Data untuk setiap item menu di halaman "Tentang"
-  static const List<Map<String, dynamic>> aboutItems = [
-    {'title': 'Profil ISI', 'icon': Icons.account_balance_outlined, 'color': Color(0xFF0099FF)},
-    {'title': 'Visi & Misi', 'icon': Icons.visibility_outlined, 'color': Color(0xFF00CC88)},
-    {'title': 'Struktur Organisasi', 'icon': Icons.device_hub_outlined, 'color': Color(0xFFFF8800)},
-    {'title': 'Statuta', 'icon': Icons.gavel_outlined, 'color': Color(0xFF6699FF)},
-    {'title': 'Renstra', 'icon': Icons.assessment_outlined, 'color': Color(0xFFFF6B9D)},
-    {'title': 'OTK', 'icon': Icons.architecture_outlined, 'color': Color(0xFF9C27B0)},
-    {'title': 'Perjanjian Kinerja Rektor', 'icon': Icons.assignment_turned_in_outlined, 'color': Color.fromARGB(255, 145, 96, 48)},
-    {'title': 'Laporan Kinerja', 'icon': Icons.receipt_long_outlined, 'color': Color(0xFFFFCC00)},
+  static const List<Map<String, dynamic>> primaryItems = [
+    {'title': 'Profil ISI', 'icon': Icons.account_balance_outlined},
+    {'title': 'Visi & Misi', 'icon': Icons.visibility_outlined},
+    {'title': 'Struktur Organisasi', 'icon': Icons.people_outline},
   ];
 
-  // Fungsi helper untuk membuka URL di browser eksternal
+  static const List<Map<String, dynamic>> legalItems = [
+    {'title': 'Statuta', 'icon': Icons.gavel_outlined},
+    {'title': 'Renstra', 'icon': Icons.assessment_outlined},
+    {'title': 'OTK', 'icon': Icons.architecture_outlined},
+  ];
+
+  static const List<Map<String, dynamic>> reportItems = [
+    {'title': 'Perjanjian Kinerja Rektor', 'icon': Icons.assignment_turned_in_outlined},
+    {'title': 'Laporan Kinerja', 'icon': Icons.receipt_long_outlined},
+  ];
+
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
@@ -26,91 +31,38 @@ class TentangPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Menggunakan Column untuk tata letak yang lebih sederhana dan efektif
+    final allItems = [primaryItems, legalItems, reportItems];
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFFF0F2F5),
       body: Column(
         children: [
-          // Header ditampilkan di bagian atas
           const TentangHeader(),
-
-          // Expanded memastikan ListView mengisi sisa ruang yang tersedia
           Expanded(
             child: Container(
-              // Transform digunakan untuk menarik Container ke atas,
-              // sehingga menciptakan efek tumpang tindih dengan header.
               transform: Matrix4.translationValues(0.0, -20.0, 0.0),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFF0F2F5),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
-              child: ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
-                itemCount: aboutItems.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final item = aboutItems[index];
-                  return Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    color: Colors.white,
-                    shadowColor: const Color(0xFF0099FF).withOpacity(0.08),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                          ),
-                          backgroundColor: Colors.white,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return _buildBottomSheetContent(context, item);
-                          },
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                        child: ListTile(
-                          leading: Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  item['color'],
-                                  (item['color'] as Color).withOpacity(0.8),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: (item['color'] as Color).withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Icon(item['icon'], color: Colors.white, size: 24),
-                          ),
-                          title: Text(
-                            item['title'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xFF333333),
-                            ),
-                          ),
-                          trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                        ),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                children: [
+                  _buildItemGroup(context, primaryItems),
+                  const SizedBox(height: 16),
+                  _buildItemGroup(context, legalItems),
+                  const SizedBox(height: 16),
+                  _buildItemGroup(context, reportItems),
+                  const SizedBox(height: 32),
+                  const Center(
+                    child: Text(
+                      'Version 1.0.0', 
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
                       ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
           ),
@@ -119,12 +71,75 @@ class TentangPage extends StatelessWidget {
     );
   }
 
-  // Widget untuk membangun konten di dalam BottomSheet
+  Widget _buildItemGroup(BuildContext context, List<Map<String, dynamic>> items) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return _buildSettingsTile(
+            context: context,
+            icon: item['icon'],
+            title: item['title'],
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                backgroundColor: Colors.white,
+                isScrollControlled: true,
+                builder: (context) {
+                  return _buildBottomSheetContent(context, item);
+                },
+              );
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return const Padding(
+            padding: EdgeInsets.only(left: 60.0),
+            child: Divider(height: 1, thickness: 1, color: Color(0xFFF0F2F5)),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
+      leading: Icon(icon, color: const Color(0xFF0072FF), size: 24),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
+          color: Color(0xFF333333),
+        ),
+      ),
+      trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    );
+  }
+
   Widget _buildBottomSheetContent(BuildContext context, Map<String, dynamic> item) {
     String title = item['title'];
     Widget detailWidget;
-
-    // Tombol tutup yang akan digunakan di setiap modal
     Widget closeButton = Positioned(
       right: 8,
       top: 8,
@@ -135,7 +150,6 @@ class TentangPage extends StatelessWidget {
       ),
     );
     
-    // Konten dinamis berdasarkan item yang dipilih
     if (title == 'Profil ISI') {
       detailWidget = _buildDetailContent(
         context: context,
@@ -152,12 +166,12 @@ class TentangPage extends StatelessWidget {
               'ISI Yogyakarta dibentuk atas dasar Keputusan Presiden RI No. 39/1984 tanggal 30 Mei 1984 dan diresmikan oleh Menteri Pendidikan dan Kebudayaan Prof. Dr. Nugroho Notosusanto pada tanggal 23 Juli 1984. ISI Yogyakarta dibentuk berdasarkan fusi atas tiga pendidikan tinggi seni yang sudah ada sebelumnya, yaitu Sekolah Tinggi Seni Rupa Indonesia “ASRI”, Akademi Musik Indonesia “AMI”, dan Akademi Seni Tari Indonesia “ASTI”.'),
           const SizedBox(height: 16),
           _buildModalSectionTitle('Ruang Lingkup'),
-           _buildModalText(
+            _buildModalText(
               'ISI Yogyakarta adalah perguruan tinggi negeri yang menyelenggarakan pendidikan akademik dalam kelompok disiplin ilmu pengetahuan di bidang seni dan jika memenuhi syarat dapat menyelenggarakan pendidikan akademik, profesi, dan vokasi sesuai dengan ketentuan Peraturan Perundang-undangan.'),
         ],
       );
     } else if (title == 'Visi & Misi') {
-       detailWidget = _buildDetailContent(
+        detailWidget = _buildDetailContent(
         context: context,
         closeButton: closeButton,
         children: [
@@ -167,16 +181,16 @@ class TentangPage extends StatelessWidget {
           _buildModalText(
               'Institut Seni Indonesia Yogyakarta menjadi pelopor perguruan tinggi seni nasional yang unggul, kreatif, dan inovatif berdasar Pancasila.'),
           const SizedBox(height: 16),
-           _buildModalSectionTitle('Misi'),
-           _buildModalText(
+            _buildModalSectionTitle('Misi'),
+            _buildModalText(
               '1. Menyelenggarakan pendidikan seni yang unggul, kreatif, dan inovatif berdasarkan Pancasila.\n'
               '2. Menyelenggarakan penelitian dan penciptaan seni yang unggul, kreatif, dan inovatif berdasarkan Pancasila.\n'
               '3. Menyelenggarakan pengabdian kepada masyarakat dalam bidang seni yang unggul, kreatif, dan inovatif berdasarkan Pancasila.\n'
               '4. Menyelenggarakan kerjasama nasional, regional, dan internasional yang strategis, sinergis, dan berkelanjutan.\n'
               '5. Menyelenggarakan manajemen yang efektif, efisien, transparan, dan akuntabel (good governance).'),
           const SizedBox(height: 16),
-           _buildModalSectionTitle('Tujuan'),
-           _buildModalText(
+            _buildModalSectionTitle('Tujuan'),
+            _buildModalText(
               '1. Mewujudkan pendidikan seni yang menghasilkan sarjana dan ahli seni yang kreatif, produktif, inovatif, dan kompetitif.\n'
               '2. Mewujudkan penelitian dan penciptaan seni yang unggul, inovatif, berwawasan lingkungan, dan berbasis pada kearifan lokal.\n'
               '3. Mewujudkan dharma pengabdian kepada masyarakat secara berkelanjutan yang mampu meningkatkan kemandirian dan daya saing bangsa untuk kesejahteraan masyarakat.\n'
@@ -207,7 +221,6 @@ class TentangPage extends StatelessWidget {
         ],
       );
     } else {
-      // Handle untuk item yang hanya membuka link
       String sectionContent = 'Informasi detail mengenai $title ISI Yogyakarta dapat diakses melalui tautan berikut.';
       String? linkUrl;
       if (title == 'Statuta') linkUrl = 'https://pandu.isi.ac.id/statuta/';
@@ -242,15 +255,12 @@ class TentangPage extends StatelessWidget {
         ],
       );
     }
-    
-    // Memberikan tinggi maksimal agar modal tidak memenuhi seluruh layar
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
       child: detailWidget,
     );
   }
 
-  // Helper untuk membangun layout dasar dari konten modal
   Widget _buildDetailContent({required BuildContext context, required Widget closeButton, required List<Widget> children}) {
     return Stack(
       children: [
@@ -261,7 +271,7 @@ class TentangPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                 Center(
+                  Center(
                   child: Container(
                     width: 40,
                     height: 4,
@@ -282,7 +292,6 @@ class TentangPage extends StatelessWidget {
     );
   }
 
-  // Helper untuk styling judul modal
   Widget _buildModalTitle(String text) {
     return Text(text,
       style: const TextStyle(
@@ -294,7 +303,6 @@ class TentangPage extends StatelessWidget {
     );
   }
 
-  // Helper untuk styling sub-judul modal
   Widget _buildModalSectionTitle(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -308,7 +316,6 @@ class TentangPage extends StatelessWidget {
     );
   }
   
-  // Helper untuk styling teks konten modal
   Widget _buildModalText(String text) {
     return Text(text,
       style: const TextStyle(
@@ -320,6 +327,7 @@ class TentangPage extends StatelessWidget {
   }
 }
 
+// Header tidak diubah, tetap sama
 class TentangHeader extends StatelessWidget {
   const TentangHeader({super.key});
 
