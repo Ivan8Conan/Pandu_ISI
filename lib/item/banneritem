@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final List<Map<String, dynamic>> promoBanners = [
   {
     'title': 'Perguruan Tinggi Seni Pertama dan Terbesar di Indonesia',
     'subtitle': 'ISI Yogyakarta, kampus seni pertama terlengkap.',
     'backgroundImage': 'assets/images/ImageWebPandu.jpg',
-    'onTap': () {
-    },
+    'url': 'https://pandu.isi.ac.id/our-achievements/',
   },
   {
     'title': 'Portal Aspirasi',
     'subtitle': 'Tempat menyampaikan pertanyaan, aduan, saran, dan kritik layanan ISI Yogyakarta',
     'backgroundImage': 'assets/images/PortalAspirasi.jpg',
-    'onTap': () {
-    },
+    'url': 'https://aspirasi.isi.ac.id/',
   },
   {
     'title': 'Layanan Informasi',
     'subtitle': 'Layanan ISI Yogyakarta dapat diakses sivitas akademika, stakeholder, dan masyarakat.',
     'backgroundImage': 'assets/images/LayananInfo.jpg',
-    'onTap': () {
-    },
+    'url': 'https://pandu.isi.ac.id/layanan-informasi/',
   },
   {
     'title': 'Inovasi Layanan Publik',
     'subtitle': 'ISI Yogyakarta menghadirkan layanan inovatif lewat kegiatan dan platform teknologi.',
     'backgroundImage': 'assets/images/InovasiLayanan.jpg',
-    'onTap': () {
-    },
+    'url': 'https://pandu.isi.ac.id/inovasi-publik/',
   },
 ];
+
+Future<void> _launchUrl(String url) async {
+  final uri = Uri.parse(url);
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    throw Exception('Tidak bisa membuka $url');
+  }
+}
