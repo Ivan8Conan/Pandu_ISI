@@ -68,9 +68,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/ImageWebPandu.jpg
-    - assets/images/Info_fixed.jpg
-    - assets/images/KolabKerjasama_fixed.jpg
-    - assets/images/PPID_fixed.jpg
+    - assets/images/InfoPublik.jpg
+    - assets/images/InovasiLayanan.jpg
+    - assets/images/Kolaborasi.jpg
+    - assets/images/LayananInfo.jpg
+    - assets/images/PermohonanInfo.jpg
+    - assets/images/PortalAspirasi.jpg
+    - assets/images/PPID.jpg
     - assets/images/LOGO-ISI.png
 
 

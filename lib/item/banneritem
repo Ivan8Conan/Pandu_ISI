@@ -11,21 +11,21 @@ final List<Map<String, dynamic>> promoBanners = [
   {
     'title': 'Portal Aspirasi',
     'subtitle': 'Tempat menyampaikan pertanyaan, aduan, saran, dan kritik layanan ISI Yogyakarta',
-    'backgroundImage': 'assets/images/ImageWebPandu.jpg',
+    'backgroundImage': 'assets/images/PortalAspirasi.jpg',
     'onTap': () {
     },
   },
   {
     'title': 'Layanan Informasi',
     'subtitle': 'Layanan ISI Yogyakarta dapat diakses sivitas akademika, stakeholder, dan masyarakat.',
-    'backgroundImage': 'assets/images/ImageWebPandu.jpg',
+    'backgroundImage': 'assets/images/LayananInfo.jpg',
     'onTap': () {
     },
   },
   {
     'title': 'Inovasi Layanan Publik',
     'subtitle': 'ISI Yogyakarta berkomitmen menghadirkan layanan inovatif lewat kegiatan dan platform teknologi.',
-    'backgroundImage': 'assets/images/ImageWebPandu.jpg',
+    'backgroundImage': 'assets/images/InovasiLayanan.jpg',
     'onTap': () {
     },
   },
