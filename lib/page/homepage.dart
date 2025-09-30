@@ -318,7 +318,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
     return Container(
       color: Colors.transparent,
       child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.zero,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),

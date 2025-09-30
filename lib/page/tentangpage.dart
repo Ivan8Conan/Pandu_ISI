@@ -47,11 +47,20 @@ class TentangPage extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 children: [
-                  _buildItemGroup(context, primaryItems),
+                  _AnimatedFadeInUp(
+                    delay: const Duration(milliseconds: 50),
+                    child: _buildItemGroup(context, primaryItems),
+                  ),
                   const SizedBox(height: 16),
-                  _buildItemGroup(context, legalItems),
+                  _AnimatedFadeInUp(
+                    delay: const Duration(milliseconds: 100),
+                    child: _buildItemGroup(context, legalItems),
+                  ),
                   const SizedBox(height: 16),
-                  _buildItemGroup(context, reportItems),
+                  _AnimatedFadeInUp(
+                    delay: const Duration(milliseconds: 150),
+                    child: _buildItemGroup(context, reportItems),
+                  ),
                   const SizedBox(height: 32),
                   const Center(
                     child: Text(
@@ -83,8 +92,7 @@ class TentangPage extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return _buildSettingsTile(
-            context: context,
+          return _InteractiveTile(
             icon: item['icon'],
             title: item['title'],
             onTap: () {
@@ -109,31 +117,6 @@ class TentangPage extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildSettingsTile({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap();
-      },
-      leading: Icon(icon, color: const Color(0xFF0072FF), size: 24),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-          color: Color(0xFF333333),
-        ),
-      ),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }
 
@@ -409,6 +392,104 @@ class TentangHeader extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AnimatedFadeInUp extends StatefulWidget {
+  final Widget child;
+  final Duration delay;
+
+  const _AnimatedFadeInUp({required this.child, required this.delay});
+
+  @override
+  _AnimatedFadeInUpState createState() => _AnimatedFadeInUpState();
+}
+
+class _AnimatedFadeInUpState extends State<_AnimatedFadeInUp> {
+  bool _isAnimated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(widget.delay, () {
+      if (mounted) {
+        setState(() {
+          _isAnimated = true;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: _isAnimated ? 0.0 : 1.0, end: _isAnimated ? 1.0 : 0.0),
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1.0 - value) * 30),
+            child: widget.child,
+          ),
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
+// Ganti _buildSettingsTile yang lama dengan ini
+class _InteractiveTile extends StatefulWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _InteractiveTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  State<_InteractiveTile> createState() => _InteractiveTileState();
+}
+
+class _InteractiveTileState extends State<_InteractiveTile> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        HapticFeedback.lightImpact();
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        transform: _isPressed
+            ? (Matrix4.identity()..scale(0.97))
+            : Matrix4.identity(),
+        child: ListTile(
+          leading: Icon(widget.icon, color: const Color(0xFF0072FF), size: 24),
+          title: Text(
+            widget.title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: Color(0xFF333333),
+            ),
+          ),
+          trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         ),
       ),
     );
