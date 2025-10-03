@@ -99,7 +99,7 @@ class TentangPage extends StatelessWidget {
               showModalBottomSheet(
                 context: context,
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 backgroundColor: Colors.white,
                 isScrollControlled: true,
@@ -288,29 +288,36 @@ class TentangPage extends StatelessWidget {
 
   Widget _buildModalSectionTitle(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(text,
+      padding: const EdgeInsets.only(top: 12.0, bottom: 6.0),
+      child: Text(
+        text.toUpperCase(),
         style: const TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-          color: Color(0xFF42A5F5),
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF6D6D72),
+          letterSpacing: 0.5,
         ),
       ),
     );
   }
   
   Widget _buildModalText(String text) {
-    return Text(text,
-      style: const TextStyle(
-        fontSize: 15,
-        color: Colors.black87,
-        height: 1.5
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: Color(0xFF1C1C1E),
+          height: 1.4,
+        ),
+        textAlign: TextAlign.justify,
       ),
     );
   }
 }
 
-// Header tidak diubah, tetap sama
 class TentangHeader extends StatelessWidget {
   const TentangHeader({super.key});
 
@@ -443,7 +450,6 @@ class _AnimatedFadeInUpState extends State<_AnimatedFadeInUp> {
   }
 }
 
-// Ganti _buildSettingsTile yang lama dengan ini
 class _InteractiveTile extends StatefulWidget {
   final IconData icon;
   final String title;
@@ -489,7 +495,8 @@ class _InteractiveTileState extends State<_InteractiveTile> {
             ),
           ),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+          dense: true,
         ),
       ),
     );
