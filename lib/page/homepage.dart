@@ -302,7 +302,7 @@ class _HomeMenuGridState extends State<_HomeMenuGrid> {
         "https://pandu.isi.ac.id/sop/SOP%20ISI%20Yogyakarta.html", Color(0xFFFF8800)),
     const _HomeMenuItem(Icons.info_outline_rounded, "Informasi", InformasiPage(), null, Color(0xFF6699FF)),
     const _HomeMenuItem(Icons.poll_outlined, "Survei", SurveiPage(), null, Color(0xFFFF6B9D)),
-    const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", ApiDatabasePage(), null, Color(0xFF9C27B0)),
+    const _HomeMenuItem(Icons.assignment_outlined, "Permohonan", null, null, Color(0xFF9C27B0)),
   ];
 
   Future<void> _launchUrl(String url, BuildContext context) async {

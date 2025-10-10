@@ -45,23 +45,14 @@ class TentangPage extends StatelessWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 children: [
-                  _AnimatedFadeInUp(
-                    delay: const Duration(milliseconds: 50),
-                    child: _buildItemGroup(context, primaryItems),
-                  ),
-                  const SizedBox(height: 16),
-                  _AnimatedFadeInUp(
-                    delay: const Duration(milliseconds: 100),
-                    child: _buildItemGroup(context, legalItems),
-                  ),
-                  const SizedBox(height: 16),
-                  _AnimatedFadeInUp(
-                    delay: const Duration(milliseconds: 150),
-                    child: _buildItemGroup(context, reportItems),
-                  ),
-                  const SizedBox(height: 32),
+                  _buildItemGroup(context, primaryItems),
+                  const SizedBox(height: 20),
+                  _buildItemGroup(context, legalItems),
+                  const SizedBox(height: 20),
+                  _buildItemGroup(context, reportItems),
+                  const SizedBox(height: 24),
                   const Center(
                     child: Text(
                       'Version 1.0.0', 
@@ -82,6 +73,7 @@ class TentangPage extends StatelessWidget {
 
   Widget _buildItemGroup(BuildContext context, List<Map<String, dynamic>> items) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -401,51 +393,6 @@ class TentangHeader extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _AnimatedFadeInUp extends StatefulWidget {
-  final Widget child;
-  final Duration delay;
-
-  const _AnimatedFadeInUp({required this.child, required this.delay});
-
-  @override
-  _AnimatedFadeInUpState createState() => _AnimatedFadeInUpState();
-}
-
-class _AnimatedFadeInUpState extends State<_AnimatedFadeInUp> {
-  bool _isAnimated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(widget.delay, () {
-      if (mounted) {
-        setState(() {
-          _isAnimated = true;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: _isAnimated ? 0.0 : 1.0, end: _isAnimated ? 1.0 : 0.0),
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
-        return Opacity(
-          opacity: value,
-          child: Transform.translate(
-            offset: Offset(0, (1.0 - value) * 30),
-            child: widget.child,
-          ),
-        );
-      },
-      child: widget.child,
     );
   }
 }
