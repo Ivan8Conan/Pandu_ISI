@@ -29,40 +29,147 @@ class TentangPage extends StatelessWidget {
     }
   }
 
+  Widget _buildAnimatedGroup(BuildContext context,
+      List<Map<String, dynamic>> items, int delay) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 400 + (delay * 100)),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1.0 - value) * 20),
+            child: child,
+          ),
+        );
+      },
+      child: _buildItemGroup(context, items),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final allItems = [primaryItems, legalItems, reportItems];
     return Scaffold(
       backgroundColor: const Color(0xFFF0F2F5),
-      body: Column(
-        children: [
-          const TentangHeader(),
-          Expanded(
-            child: Container(
-              transform: Matrix4.translationValues(0.0, -20.0, 0.0),
+      body: CustomScrollView(
+        slivers: [
+          // --- Header ---
+          SliverAppBar(
+            backgroundColor: const Color(0xFF0099FF),
+            elevation: 0,
+            pinned: true,
+            toolbarHeight: 100.0,
+            flexibleSpace: Container(
               decoration: const BoxDecoration(
-                color: Color(0xFFF0F2F5),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                gradient: LinearGradient(
+                  colors: [Color(0xFF0099FF), Color(0xFF0072FF)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                children: [
-                  _buildItemGroup(context, primaryItems),
-                  const SizedBox(height: 20),
-                  _buildItemGroup(context, legalItems),
-                  const SizedBox(height: 20),
-                  _buildItemGroup(context, reportItems),
-                  const SizedBox(height: 24),
-                  const Center(
-                    child: Text(
-                      'Version 1.0.0', 
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
+            ),
+            titleSpacing: 20,
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.asset(
+                        'assets/images/LOGO-ISI.png',
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.school_outlined,
+                            color: Colors.grey,
+                            size: 30,
+                          );
+                        },
                       ),
                     ),
                   ),
-                ],
+                ),
+                const SizedBox(width: 16),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Tentang Aplikasi",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        "Informasi & Profil ISI Yogyakarta",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Konten Utama
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFFF0F2F5),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildAnimatedGroup(context, primaryItems, 0),
+                    const SizedBox(height: 24),
+                    _buildAnimatedGroup(context, legalItems, 1),
+                    const SizedBox(height: 24),
+                    _buildAnimatedGroup(context, reportItems, 2),
+                    const SizedBox(height: 32),
+                    const Center(
+                      child: Text(
+                        'Version 1.0.0',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -73,41 +180,51 @@ class TentangPage extends StatelessWidget {
 
   Widget _buildItemGroup(BuildContext context, List<Map<String, dynamic>> items) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return _InteractiveTile(
-            icon: item['icon'],
-            title: item['title'],
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                backgroundColor: Colors.white,
-                isScrollControlled: true,
-                builder: (context) {
-                  return _buildBottomSheetContent(context, item);
-                },
-              );
-            },
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const Padding(
-            padding: EdgeInsets.only(left: 60.0),
-            child: Divider(height: 1, thickness: 1, color: Color(0xFFF0F2F5)),
-          );
-        },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          children: [
+            for (int i = 0; i < items.length; i++)
+              Column(
+                children: [
+                  _InteractiveTile(
+                    icon: items[i]['icon'],
+                    title: items[i]['title'],
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                        ),
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return _buildBottomSheetContent(context, items[i]);
+                        },
+                      );
+                    },
+                  ),
+                  if (i < items.length - 1)
+                    Container(
+                      height: 1,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      color: const Color(0xFFF0F2F5),
+                    ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -268,7 +385,8 @@ class TentangPage extends StatelessWidget {
   }
 
   Widget _buildModalTitle(String text) {
-    return Text(text,
+    return Text(
+      text,
       style: const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
@@ -292,7 +410,7 @@ class TentangPage extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildModalText(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
@@ -305,93 +423,6 @@ class TentangPage extends StatelessWidget {
           height: 1.4,
         ),
         textAlign: TextAlign.justify,
-      ),
-    );
-  }
-}
-
-class TentangHeader extends StatelessWidget {
-  const TentangHeader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 20),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF0099FF), Color(0xFF0072FF)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                      'assets/images/LOGO-ISI.png',
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.school_outlined,
-                          color: Colors.grey,
-                          size: 30,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Tentang Aplikasi",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      "Informasi & Profil ISI Yogyakarta",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -428,22 +459,32 @@ class _InteractiveTileState extends State<_InteractiveTile> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
-        transform: _isPressed
-            ? (Matrix4.identity()..scale(0.97))
-            : Matrix4.identity(),
-        child: ListTile(
-          leading: Icon(widget.icon, color: const Color(0xFF0072FF), size: 24),
-          title: Text(
-            widget.title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-              color: Color(0xFF333333),
+        transform: _isPressed ? (Matrix4.identity()..scale(0.98)) : Matrix4.identity(),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: widget.onTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Icon(widget.icon, color: const Color(0xFF0072FF), size: 24),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF333333),
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.chevron_right, color: Colors.grey[500], size: 24),
+                ],
+              ),
             ),
           ),
-          trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-          dense: true,
         ),
       ),
     );
