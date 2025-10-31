@@ -1,5 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'historypermohonanpage.dart';
 
 class PermohonanInformasiPage extends StatefulWidget {
   const PermohonanInformasiPage({super.key});
@@ -9,6 +10,8 @@ class PermohonanInformasiPage extends StatefulWidget {
 }
 
 class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
+  final String baseUrl = "http://172.27.64.200/pandu_isi";
+
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
   final _nikController = TextEditingController();
@@ -456,74 +459,160 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
       setState(() {
         _isSubmitting = true;
       });
-      await Future.delayed(const Duration(seconds: 2));
 
-      setState(() {
-        _isSubmitting = false;
-      });
+      try {
+        final response = await http.post(
+          Uri.parse('$baseUrl/submit_permohonan.php'), // Endpoint baru
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            "nama": _namaController.text,
+            "jenis_pelapor": _mapJenisPelaporToId(_selectedJenisPelapor!), // Harus ID
+            "NIK": _nikController.text,
+            "email": _emailController.text,
+            "no_telpon": _noteleponController.text,
+            "alamat": _alamatController.text,
+            "pekerjaan": _pekerjaanController.text,
+            "kategoriID": _mapKategoriToId(_selectedKategori!), // Harus ID
+            "informasi_diminta": _informasiController.text,
+            "tujuan": _tujuanController.text,
+          }),
+        );
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.check_circle, color: Colors.green),
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        final responseJson = jsonDecode(response.body);
+
+        if (response.statusCode == 200 && responseJson['success'] == true) {
+          // Berhasil
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(width: 12),
-                const Text(
-                  'Berhasil!',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            content: const Text(
-              'Permohonan informasi Anda telah berhasil dikirim. Kami akan memproses permohonan Anda dan memberikan respons dalam waktu yang ditentukan.',
-              style: TextStyle(fontSize: 14),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  PermohonanHistoryStore().add(
-                    PermohonanHistory(
-                      nama: _namaController.text,
-                      nik: _nikController.text,
-                      alamat: _alamatController.text,
-                      pekerjaan: _pekerjaanController.text,
-                      informasi: _informasiController.text,
-                      tujuan: _tujuanController.text,
-                      jenisPelapor: _selectedJenisPelapor ?? '',
-                      kategori: _selectedKategori ?? '',
-                      waktu: DateTime.now(),
+                title: Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.check_circle, color: Colors.green),
                     ),
-                  );
-                  Navigator.of(context).pop();
-                  _resetForm();
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xFF007BFF),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'Berhasil!',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text('OK'),
-              ),
-            ],
+                content: Text(
+                  'Permohonan informasi Anda telah berhasil dikirim dengan ID: ${responseJson['permohonanID']}. Kami akan memproses permohonan Anda dan memberikan respons dalam waktu yang ditentukan.',
+                  style: const TextStyle(fontSize: 14),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _resetForm();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF007BFF),
+                    ),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
           );
-        },
-      );
+        } else {
+          // Gagal
+          String message = responseJson['message'] ?? 'Terjadi kesalahan.';
+          _showErrorDialog(message);
+        }
+      } catch (e) {
+        print('Error submitting form: $e');
+        _showErrorDialog('Tidak dapat menghubungi server. Pastikan koneksi internet dan alamat server benar.');
+      } finally {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
+
+void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.red.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.error_outline, color: Colors.red),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Gagal!',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          content: Text(message, style: const TextStyle(fontSize: 14)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF007BFF),
+              ),
+              child: const Text('Tutup'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Fungsi untuk memetakan string jenis pelapor ke ID
+  int _mapJenisPelaporToId(String jenisPelapor) {
+    switch (jenisPelapor) {
+      case 'Perorangan': return 1;
+      case 'Lembaga': return 2;
+      case 'Wartawan': return 3;
+      case 'Mahasiswa': return 4;
+      default: return 1; // Default jika tidak ditemukan
+    }
+  }
+
+  // Fungsi untuk memetakan string kategori ke ID
+  int _mapKategoriToId(String kategori) {
+    switch (kategori) {
+      case 'Informasi Publik': return 1;
+      case 'Layanan Publik': return 2;
+      case 'Pengaduan': return 3;
+      case 'Permintaan Data': return 4;
+      default: return 1; // Default jika tidak ditemukan
+    }
+  }
+
 
   void _resetForm() {
     _formKey.currentState!.reset();
