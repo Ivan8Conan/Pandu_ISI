@@ -10,7 +10,7 @@ class PermohonanInformasiPage extends StatefulWidget {
 }
 
 class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
-  final String baseUrl = "http://172.27.64.200/pandu_isi";
+  final String baseUrl = "http://10.184.107.232/pandu_isi";
 
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
@@ -181,7 +181,7 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
 
                       _buildTextFormField(
                         controller: _emailController,
-                        label: 'Email',
+                        label: 'Email (email yang masih aktif)',
                         icon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
@@ -200,7 +200,7 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
 
                       _buildTextFormField(
                         controller: _noteleponController,
-                        label: 'No. Telepon',
+                        label: 'No. Telepon (nomor telepon yang masih aktif)',
                         icon: Icons.phone_outlined,
                         keyboardType: TextInputType.phone,
                         validator: (value) {

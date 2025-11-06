@@ -188,24 +188,6 @@ class HomeHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(context, MaterialPageRoute(builder: (_) => const PermohonanHistoryPage()));
-                  //   },
-                  //   child: Container(
-                  //     width: 32,
-                  //     height: 32,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.white.withOpacity(0.2),
-                  //       borderRadius: BorderRadius.circular(16),
-                  //     ),
-                  //     child: const Icon(
-                  //       Icons.receipt_long_outlined,
-                  //       color: Colors.white,
-                  //       size: 24,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               const SizedBox(height: 24),
