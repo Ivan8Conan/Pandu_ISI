@@ -10,7 +10,7 @@ class PermohonanInformasiPage extends StatefulWidget {
 }
 
 class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
-  final String baseUrl = "http://10.184.107.232/pandu_isi";
+  final String baseUrl = "http://10.118.34.232/pandu_isi";
 
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
@@ -462,19 +462,19 @@ class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
 
       try {
         final response = await http.post(
-          Uri.parse('$baseUrl/submit_permohonan.php'), // Endpoint baru
+          Uri.parse('$baseUrl/submit_permohonan.php'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, dynamic>{
             "nama": _namaController.text,
-            "jenis_pelapor": _mapJenisPelaporToId(_selectedJenisPelapor!), // Harus ID
+            "jenis_pelapor": _mapJenisPelaporToId(_selectedJenisPelapor!),
             "NIK": _nikController.text,
             "email": _emailController.text,
             "no_telpon": _noteleponController.text,
             "alamat": _alamatController.text,
             "pekerjaan": _pekerjaanController.text,
-            "kategoriID": _mapKategoriToId(_selectedKategori!), // Harus ID
+            "kategoriID": _mapKategoriToId(_selectedKategori!),
             "informasi_diminta": _informasiController.text,
             "tujuan": _tujuanController.text,
           }),
@@ -598,7 +598,7 @@ void _showErrorDialog(String message) {
       case 'Lembaga': return 2;
       case 'Wartawan': return 3;
       case 'Mahasiswa': return 4;
-      default: return 1; // Default jika tidak ditemukan
+      default: return 1;
     }
   }
 
@@ -609,7 +609,7 @@ void _showErrorDialog(String message) {
       case 'Layanan Publik': return 2;
       case 'Pengaduan': return 3;
       case 'Permintaan Data': return 4;
-      default: return 1; // Default jika tidak ditemukan
+      default: return 1;
     }
   }
 
