@@ -10,7 +10,7 @@ class ApiDatabasePage extends StatefulWidget {
 }
 
 class _ApiDatabasePageState extends State<ApiDatabasePage> {
-  final String baseUrl = "http://10.118.34.232/pandu_isi";
+  final String baseUrl = "https://mobileapps.isi.ac.id/pandu_isi";
 
   Map<String, List<dynamic>> dataTables = {};
   bool isLoading = true;

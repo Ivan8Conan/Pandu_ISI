@@ -10,7 +10,7 @@ class PermohonanInformasiPage extends StatefulWidget {
 }
 
 class _PermohonanInformasiPageState extends State<PermohonanInformasiPage> {
-  final String baseUrl = "http://10.118.34.232/pandu_isi";
+  final String baseUrl = "https://mobileapps.isi.ac.id/pandu_isi";
 
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
